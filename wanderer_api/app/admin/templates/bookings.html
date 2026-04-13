@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Bookings{% endblock %}
+{% block content %}
+<div class="mb-8">
+    <h2 class="text-3xl font-bold">Bookings</h2>
+    <p class="text-wanderer-dim mt-1">Manage restaurant and experience bookings</p>
+</div>
+
+<!-- Stats -->
+<div class="grid grid-cols-3 gap-6 mb-8">
+    <div class="bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <p class="text-wanderer-dim text-sm">Today</p>
+        <p class="text-3xl font-bold mt-2 text-wanderer-primary">{{ bookings_today }}</p>
+    </div>
+    <div class="bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <p class="text-wanderer-dim text-sm">Pending</p>
+        <p class="text-3xl font-bold mt-2 text-wanderer-amber">{{ bookings_pending }}</p>
+    </div>
+    <div class="bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <p class="text-wanderer-dim text-sm">Confirmation Rate</p>
+        <p class="text-3xl font-bold mt-2 text-green-400">87%</p>
+    </div>
+</div>
+
+<!-- Bookings Table -->
+<div class="bg-wanderer-surface rounded-2xl border border-wanderer-light/50 overflow-hidden">
+    <table class="w-full">
+        <thead>
+            <tr class="border-b border-wanderer-light/50">
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Guest</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Place</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Date &amp; Time</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Party</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Status</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in recent_bookings %}
+            <tr class="border-b border-wanderer-light/30 hover:bg-wanderer-light/20 transition">
+                <td class="px-6 py-4 font-medium">{{ b.user }}</td>
+                <td class="px-6 py-4">{{ b.place }}</td>
+                <td class="px-6 py-4 text-sm text-wanderer-secondary">{{ b.date }}</td>
+                <td class="px-6 py-4">{{ b.party }}</td>
+                <td class="px-6 py-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-medium {% if b.status == 'confirmed' %}bg-green-500/10 text-green-400{% else %}bg-amber-500/10 text-amber-400{% endif %}">{{ b.status }}</span>
+                </td>
+                <td class="px-6 py-4">
+                    {% if b.status == 'pending' %}
+                    <button class="px-3 py-1 bg-green-500/10 text-green-400 rounded-lg text-xs hover:bg-green-500/20 transition">Confirm</button>
+                    <button class="px-3 py-1 bg-red-500/10 text-red-400 rounded-lg text-xs ml-2 hover:bg-red-500/20 transition">Decline</button>
+                    {% else %}
+                    <span class="text-wanderer-dim text-xs">No action needed</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

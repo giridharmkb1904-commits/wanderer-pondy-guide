@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}AI Agents{% endblock %}
+{% block content %}
+<div class="mb-8">
+    <h2 class="text-3xl font-bold">AI Agents</h2>
+    <p class="text-wanderer-dim mt-1">Multi-agent orchestration monitoring</p>
+</div>
+
+<!-- Orchestrator Status -->
+<div class="bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50 mb-8">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-wanderer-primary to-wanderer-muted flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold">Orchestrator</h3>
+                <p class="text-sm text-wanderer-dim">Claude Sonnet 4.6 via AWS Bedrock</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <div class="w-3 h-3 rounded-full bg-green-400 animate-pulse"></div>
+            <span class="text-sm text-green-400">Active</span>
+        </div>
+    </div>
+    <div class="grid grid-cols-4 gap-4 mt-6">
+        <div class="bg-wanderer-light/30 rounded-xl p-4">
+            <p class="text-xs text-wanderer-dim">Total Calls Today</p>
+            <p class="text-2xl font-bold mt-1">{{ conversations_today }}</p>
+        </div>
+        <div class="bg-wanderer-light/30 rounded-xl p-4">
+            <p class="text-xs text-wanderer-dim">Avg Latency</p>
+            <p class="text-2xl font-bold mt-1">420ms</p>
+        </div>
+        <div class="bg-wanderer-light/30 rounded-xl p-4">
+            <p class="text-xs text-wanderer-dim">Cache Hit Rate</p>
+            <p class="text-2xl font-bold mt-1 text-wanderer-primary">89%</p>
+        </div>
+        <div class="bg-wanderer-light/30 rounded-xl p-4">
+            <p class="text-xs text-wanderer-dim">Est. Cost Today</p>
+            <p class="text-2xl font-bold mt-1">&#8377;1,240</p>
+        </div>
+    </div>
+</div>
+
+<!-- Agent Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    {% for agent in agent_stats %}
+    <div class="bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50 hover:border-wanderer-primary/30 transition">
+        <div class="flex items-center justify-between mb-4">
+            <h4 class="font-semibold text-sm">{{ agent.name }}</h4>
+            <div class="w-2 h-2 rounded-full bg-green-400"></div>
+        </div>
+        <div class="space-y-3">
+            <div class="flex justify-between text-sm">
+                <span class="text-wanderer-dim">Calls</span>
+                <span class="font-medium">{{ agent.calls }}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+                <span class="text-wanderer-dim">Avg Latency</span>
+                <span class="font-medium">{{ agent.avg_ms }}ms</span>
+            </div>
+            <div class="flex justify-between text-sm">
+                <span class="text-wanderer-dim">Model</span>
+                <span class="font-medium text-wanderer-primary text-xs">{{ agent.model }}</span>
+            </div>
+        </div>
+        <div class="mt-4 w-full h-1.5 bg-wanderer-light rounded-full">
+            <div class="h-1.5 bg-wanderer-primary rounded-full" style="width: {{ (agent.calls / 89 * 100)|round|int }}%"></div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

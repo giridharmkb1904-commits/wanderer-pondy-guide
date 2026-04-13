@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Places{% endblock %}
+{% block content %}
+<div class="flex justify-between items-center mb-8">
+    <div>
+        <h2 class="text-3xl font-bold">Places</h2>
+        <p class="text-wanderer-dim mt-1">Manage Pondicherry listings</p>
+    </div>
+    <button class="px-6 py-3 bg-wanderer-primary text-wanderer-bg rounded-xl font-medium hover:bg-wanderer-primary/90 transition">+ Add Place</button>
+</div>
+
+<!-- Filters -->
+<div class="flex gap-3 mb-6">
+    {% for cat in ['All', 'Restaurant', 'Beach', 'Temple', 'Cafe', 'Hotel', 'Experience'] %}
+    <button class="px-4 py-2 rounded-xl text-sm {% if cat == 'All' %}bg-wanderer-primary text-wanderer-bg{% else %}bg-wanderer-surface border border-wanderer-light/50 text-wanderer-secondary hover:border-wanderer-primary/50{% endif %} transition">{{ cat }}</button>
+    {% endfor %}
+</div>
+
+<!-- Places Table -->
+<div class="bg-wanderer-surface rounded-2xl border border-wanderer-light/50 overflow-hidden">
+    <table class="w-full">
+        <thead>
+            <tr class="border-b border-wanderer-light/50">
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Place</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Category</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Rating</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Visits</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Bookings</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for place in popular_places %}
+            <tr class="border-b border-wanderer-light/30 hover:bg-wanderer-light/20 transition">
+                <td class="px-6 py-4">
+                    <p class="font-medium">{{ place.name }}</p>
+                </td>
+                <td class="px-6 py-4">
+                    <span class="px-3 py-1 rounded-full text-xs bg-wanderer-light capitalize">{{ place.category }}</span>
+                </td>
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-1">
+                        <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <span class="text-sm">4.{{ loop.index }}</span>
+                    </div>
+                </td>
+                <td class="px-6 py-4 text-sm">{{ place.visits }}</td>
+                <td class="px-6 py-4 text-sm">{{ place.bookings }}</td>
+                <td class="px-6 py-4">
+                    <button class="text-wanderer-primary text-sm hover:underline">Edit</button>
+                    <span class="text-wanderer-dim mx-2">|</span>
+                    <button class="text-red-400 text-sm hover:underline">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

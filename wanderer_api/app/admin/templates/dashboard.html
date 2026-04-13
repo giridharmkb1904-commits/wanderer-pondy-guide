@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="mb-8">
+    <h2 class="text-3xl font-bold">Dashboard</h2>
+    <p class="text-wanderer-dim mt-1">Wanderer Pondicherry — Live Overview</p>
+</div>
+
+<!-- Key Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="stat-card bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50 glow">
+        <div class="flex justify-between items-start">
+            <div>
+                <p class="text-wanderer-dim text-sm">Active Today</p>
+                <p class="text-3xl font-bold mt-2 text-wanderer-primary">{{ active_today }}</p>
+            </div>
+            <div class="w-10 h-10 bg-wanderer-primary/10 rounded-xl flex items-center justify-center">
+                <svg class="w-5 h-5 text-wanderer-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+            </div>
+        </div>
+        <p class="text-xs text-wanderer-dim mt-3">{{ total_users }} total users</p>
+    </div>
+
+    <div class="stat-card bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <div class="flex justify-between items-start">
+            <div>
+                <p class="text-wanderer-dim text-sm">Revenue Today</p>
+                <p class="text-3xl font-bold mt-2">&#8377;{{ "{:,}".format(revenue_today) }}</p>
+            </div>
+            <div class="w-10 h-10 bg-green-500/10 rounded-xl flex items-center justify-center">
+                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+        </div>
+        <p class="text-xs text-wanderer-dim mt-3">&#8377;{{ "{:,}".format(revenue_month) }} this month</p>
+    </div>
+
+    <div class="stat-card bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <div class="flex justify-between items-start">
+            <div>
+                <p class="text-wanderer-dim text-sm">Bookings Today</p>
+                <p class="text-3xl font-bold mt-2 text-wanderer-amber">{{ bookings_today }}</p>
+            </div>
+            <div class="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center">
+                <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </div>
+        </div>
+        <p class="text-xs text-wanderer-dim mt-3">{{ bookings_pending }} pending confirmation</p>
+    </div>
+
+    <div class="stat-card bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <div class="flex justify-between items-start">
+            <div>
+                <p class="text-wanderer-dim text-sm">AI Conversations</p>
+                <p class="text-3xl font-bold mt-2">{{ conversations_today }}</p>
+            </div>
+            <div class="w-10 h-10 bg-purple-500/10 rounded-xl flex items-center justify-center">
+                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            </div>
+        </div>
+        <p class="text-xs text-wanderer-dim mt-3">{{ avg_session_minutes }} min avg session</p>
+    </div>
+</div>
+
+<!-- Tier Breakdown + Revenue Chart -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+    <!-- Tier Breakdown -->
+    <div class="bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <h3 class="text-lg font-semibold mb-4">Tier Breakdown</h3>
+        {% for tier, count in tier_breakdown.items() %}
+        <div class="mb-4">
+            <div class="flex justify-between text-sm mb-1">
+                <span class="capitalize {% if tier == 'concierge' %}text-wanderer-amber{% elif tier == 'guide' %}text-wanderer-primary{% else %}text-wanderer-secondary{% endif %}">{{ tier }}</span>
+                <span class="text-wanderer-dim">{{ count }}</span>
+            </div>
+            <div class="w-full h-2 bg-wanderer-light rounded-full">
+                <div class="h-2 rounded-full {% if tier == 'concierge' %}bg-amber-500{% elif tier == 'guide' %}bg-wanderer-primary{% else %}bg-wanderer-secondary{% endif %}" style="width: {{ (count / total_users * 100)|round|int }}%"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Revenue Chart -->
+    <div class="lg:col-span-2 bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <h3 class="text-lg font-semibold mb-4">Revenue (7 Days)</h3>
+        <div class="flex items-end gap-3 h-48">
+            {% for day in revenue_7day %}
+            <div class="flex-1 flex flex-col items-center">
+                <div class="w-full bg-wanderer-primary/20 rounded-t-lg relative" style="height: {{ (day.amount / 18000 * 100)|round|int }}%">
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs text-wanderer-dim whitespace-nowrap">&#8377;{{ "{:,}".format(day.amount) }}</div>
+                    <div class="w-full h-full bg-gradient-to-t from-wanderer-primary/40 to-wanderer-primary/10 rounded-t-lg"></div>
+                </div>
+                <span class="text-xs text-wanderer-dim mt-2">{{ day.date }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Popular Places + Recent Bookings -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Popular Places -->
+    <div class="bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <h3 class="text-lg font-semibold mb-4">Popular Places</h3>
+        <div class="space-y-3">
+            {% for place in popular_places[:6] %}
+            <div class="flex items-center justify-between p-3 rounded-xl hover:bg-wanderer-light/30 transition">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-wanderer-primary/10 flex items-center justify-center text-xs font-bold text-wanderer-primary">{{ loop.index }}</div>
+                    <div>
+                        <p class="text-sm font-medium">{{ place.name }}</p>
+                        <p class="text-xs text-wanderer-dim capitalize">{{ place.category }}</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-medium">{{ place.visits }}</p>
+                    <p class="text-xs text-wanderer-dim">visits</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <h3 class="text-lg font-semibold mb-4">Recent Bookings</h3>
+        <div class="space-y-3">
+            {% for booking in recent_bookings %}
+            <div class="flex items-center justify-between p-3 rounded-xl hover:bg-wanderer-light/30 transition">
+                <div>
+                    <p class="text-sm font-medium">{{ booking.user }} &rarr; {{ booking.place }}</p>
+                    <p class="text-xs text-wanderer-dim">{{ booking.date }} &middot; {{ booking.party }} guests</p>
+                </div>
+                <span class="px-3 py-1 rounded-full text-xs font-medium {% if booking.status == 'confirmed' %}bg-green-500/10 text-green-400{% else %}bg-amber-500/10 text-amber-400{% endif %}">
+                    {{ booking.status }}
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderer Admin — {% block title %}Dashboard{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        wanderer: {
+                            bg: '#0A0A0C',
+                            surface: '#141418',
+                            light: '#1E1E24',
+                            primary: '#3ECFB4',
+                            muted: '#2A9D8F',
+                            amber: '#F59E0B',
+                            text: '#F5F5F5',
+                            secondary: '#9CA3AF',
+                            dim: '#6B7280',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .glow { box-shadow: 0 0 20px rgba(62, 207, 180, 0.15); }
+        .stat-card:hover { transform: translateY(-2px); transition: all 0.2s; }
+        .nav-link.active { border-left: 3px solid #3ECFB4; background: rgba(62, 207, 180, 0.08); }
+    </style>
+</head>
+<body class="bg-wanderer-bg text-wanderer-text min-h-screen">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-wanderer-surface border-r border-wanderer-light/50 flex flex-col fixed h-full">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold text-wanderer-primary">Wanderer</h1>
+                <p class="text-xs text-wanderer-dim mt-1">Admin Dashboard</p>
+            </div>
+            <nav class="flex-1 px-3">
+                <a href="/admin" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-sm mb-1 hover:bg-wanderer-light/50 {% if request.url.path == '/admin/' or request.url.path == '/admin' %}active{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    Dashboard
+                </a>
+                <a href="/admin/places" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-sm mb-1 hover:bg-wanderer-light/50 {% if 'places' in request.url.path %}active{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Places
+                </a>
+                <a href="/admin/bookings" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-sm mb-1 hover:bg-wanderer-light/50 {% if 'bookings' in request.url.path %}active{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    Bookings
+                </a>
+                <a href="/admin/users" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-sm mb-1 hover:bg-wanderer-light/50 {% if 'users' in request.url.path %}active{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"></path></svg>
+                    Users
+                </a>
+                <a href="/admin/agents" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-sm mb-1 hover:bg-wanderer-light/50 {% if 'agents' in request.url.path %}active{% endif %}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    AI Agents
+                </a>
+            </nav>
+            <div class="p-4 border-t border-wanderer-light/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-wanderer-primary/20 flex items-center justify-center">
+                        <span class="text-wanderer-primary text-sm font-bold">G</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium">Giridhar K.</p>
+                        <p class="text-xs text-wanderer-dim">Admin</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="flex-1 ml-64 p-8">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

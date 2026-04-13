@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Users{% endblock %}
+{% block content %}
+<div class="mb-8">
+    <h2 class="text-3xl font-bold">Users</h2>
+    <p class="text-wanderer-dim mt-1">{{ total_users }} registered travelers</p>
+</div>
+
+<!-- Stats -->
+<div class="grid grid-cols-4 gap-6 mb-8">
+    <div class="bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <p class="text-wanderer-dim text-sm">Total</p>
+        <p class="text-3xl font-bold mt-2">{{ total_users }}</p>
+    </div>
+    <div class="bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <p class="text-wanderer-dim text-sm">Explorer</p>
+        <p class="text-3xl font-bold mt-2 text-wanderer-secondary">{{ tier_breakdown.explorer }}</p>
+    </div>
+    <div class="bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <p class="text-wanderer-dim text-sm">Guide</p>
+        <p class="text-3xl font-bold mt-2 text-wanderer-primary">{{ tier_breakdown.guide }}</p>
+    </div>
+    <div class="bg-wanderer-surface rounded-2xl p-6 border border-wanderer-light/50">
+        <p class="text-wanderer-dim text-sm">Concierge</p>
+        <p class="text-3xl font-bold mt-2 text-wanderer-amber">{{ tier_breakdown.concierge }}</p>
+    </div>
+</div>
+
+<!-- Users Table -->
+<div class="bg-wanderer-surface rounded-2xl border border-wanderer-light/50 overflow-hidden">
+    <table class="w-full">
+        <thead>
+            <tr class="border-b border-wanderer-light/50">
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Name</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Phone</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Tier</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Days</th>
+                <th class="text-left px-6 py-4 text-xs font-medium text-wanderer-dim uppercase">Joined</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in recent_users %}
+            <tr class="border-b border-wanderer-light/30 hover:bg-wanderer-light/20 transition">
+                <td class="px-6 py-4 font-medium">{{ u.name }}</td>
+                <td class="px-6 py-4 text-sm text-wanderer-secondary">{{ u.phone }}</td>
+                <td class="px-6 py-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-medium capitalize {% if u.tier == 'concierge' %}bg-amber-500/10 text-amber-400{% elif u.tier == 'guide' %}bg-wanderer-primary/10 text-wanderer-primary{% else %}bg-wanderer-light text-wanderer-secondary{% endif %}">{{ u.tier }}</span>
+                </td>
+                <td class="px-6 py-4">{{ u.days }}</td>
+                <td class="px-6 py-4 text-sm text-wanderer-dim">{{ u.joined }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
