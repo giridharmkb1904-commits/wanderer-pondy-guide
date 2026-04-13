@@ -163,15 +163,39 @@ All features are accessed through conversation — no menus, no tabs.
 - **API framework:** Node.js/Express or FastAPI (Python)
 - **Booking integration:** Twilio (calling), WhatsApp Business API, partner hotel APIs
 
-### 5.3 AI Orchestration Layer
+### 5.3 AI Orchestration Layer — Multi-Agent Architecture
 
-- **Conversation engine:** Claude Sonnet 4.6 via AWS Bedrock
-- **System prompt context:** user profile, location, time, weather, active itinerary, preferences, conversation history
-- **Prompt caching:** 5-minute TTL — system prompt + user context cached (~90% input token savings)
-- **Tool use / function calling:** AI calls internal APIs for:
-  - Place search & filtering
-  - Booking actions (restaurant, hotel, experience)
-  - Weather lookup
+The AI guide is not a single monolithic model — it is an **orchestrator** that routes user intent to specialized managed agents, each with focused system prompts, tools, and cost-optimized models.
+
+#### Agent Roster
+
+| Agent | Role | Model | Tools |
+|-------|------|-------|-------|
+| **Orchestrator** | Intent detection, conversation flow, agent routing, response synthesis | Claude Sonnet 4.6 (Bedrock) | All sub-agents, conversation history |
+| **Restaurant Agent** | Food recommendations, cuisine matching, dietary filtering, menu knowledge | GPT-4.1-mini | `search_places(category=restaurant)`, `get_reviews` |
+| **Hotel Agent** | Accommodation recs, price comparison across Booking.com/Goibibo/MakeMyTrip/Agoda | GPT-4.1-mini | `compare_hotels`, `book_hotel`, `check_availability` |
+| **Sightseeing Agent** | History, culture, temples, beaches, hidden gems, photo spots, deep narrations | Claude Haiku 4.5 | `search_places`, `get_history`, `get_events` |
+| **Itinerary Agent** | Trip planning, day-by-day scheduling, weather-aware pivots, time optimization | GPT-4.1-mini | `create_itinerary`, `weather_api`, `route_calculate` |
+| **Booking Agent** | Executes actual bookings — WhatsApp, Twilio calls, hotel API transactions | GPT-4.1-nano | `whatsapp_send`, `twilio_call`, `hotel_api_book` |
+| **Safety Agent** | SOS handling, emergency info, document vault, travel alerts, insurance | GPT-4.1-nano | `emergency_lookup`, `alert_check`, `insurance_api` |
+| **Transport Agent** | Navigation, auto/bike/ferry routing, local pricing intelligence | GPT-4.1-nano | `maps_api`, `route_calculate`, `transport_pricing` |
+| **Budget Agent** | Spending tracking, budget-aware filtering, cost optimization suggestions | GPT-4.1-nano | `budget_query`, `search_places(price_filter)` |
+
+#### Orchestration Flow
+
+1. User speaks/types → STT → text arrives at Orchestrator
+2. Orchestrator classifies intent and selects 1+ agents (can be parallel)
+3. Sub-agents execute with their focused tools and return structured results
+4. Orchestrator synthesizes a natural response from all agent outputs
+5. Response → TTS → user hears the guide speak
+
+#### Cost Optimization via Agent Routing
+
+- Simple queries ("where's the nearest ATM?") → Transport Agent (nano, ~$0.05/1M) — no Sonnet needed
+- Complex queries ("plan tomorrow with a temple in the morning, French lunch, and sunset beach") → Orchestrator (Sonnet) → parallel dispatch to Sightseeing + Restaurant + Itinerary agents
+- Booking execution → Booking Agent (nano) — pure API calls, minimal reasoning needed
+
+- **Prompt caching:** 5-minute TTL on Orchestrator system prompt + user context (~90% input token savings)
   - Navigation/routing
   - Budget tracking
   - Itinerary CRUD
