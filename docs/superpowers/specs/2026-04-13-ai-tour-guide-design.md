@@ -1,4 +1,4 @@
-# AI Tour Guide — Product Design Specification
+# Wanderer — Product Design Specification
 
 **Author:** Giridhar Kannabiran
 **Date:** 2026-04-13
@@ -8,7 +8,7 @@
 
 ## 1. Vision
 
-An AI-native, voice-first personal tour guide app that replaces human tour guides with an intelligent, multilingual AI companion. Starting with Pondicherry, expanding to cities across India.
+**Wanderer** — an AI-native, voice-first personal tour guide app that replaces human tour guides with an intelligent, multilingual AI companion. Starting with Pondicherry, expanding to cities across India.
 
 The AI IS the app — no traditional screens, no tabs, no menus. Users talk to their guide and it handles everything: recommendations, bookings, navigation, safety, and trip memories.
 
