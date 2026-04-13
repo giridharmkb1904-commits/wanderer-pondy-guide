@@ -5,6 +5,7 @@ import '../providers/chat_provider.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/voice_button.dart';
 import '../widgets/waveform_animation.dart';
+import '../widgets/typing_indicator.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
@@ -95,8 +96,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   : ListView.builder(
                       controller: _scrollController,
                       padding: const EdgeInsets.symmetric(vertical: 8),
-                      itemCount: chatState.messages.length,
-                      itemBuilder: (context, index) => MessageBubble(message: chatState.messages[index]),
+                      itemCount: chatState.messages.length + (chatState.isTyping ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index == chatState.messages.length && chatState.isTyping) {
+                          return const TypingIndicator();
+                        }
+                        return MessageBubble(message: chatState.messages[index]);
+                      },
                     ),
             ),
             // Input area
