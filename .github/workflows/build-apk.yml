@@ -5,6 +5,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+defaults:
+  run:
+    working-directory: wanderer_app
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: wanderer-release-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: wanderer_app/build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
 
       - name: Create GitHub Release
@@ -41,7 +45,7 @@ jobs:
         with:
           tag_name: build-${{ github.run_number }}
           name: Wanderer build ${{ github.run_number }}
-          files: build/app/outputs/flutter-apk/app-release.apk
+          files: wanderer_app/build/app/outputs/flutter-apk/app-release.apk
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
