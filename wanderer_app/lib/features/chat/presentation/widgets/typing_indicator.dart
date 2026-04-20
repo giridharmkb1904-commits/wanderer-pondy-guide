@@ -19,7 +19,7 @@ class _TypingIndicatorState extends State<TypingIndicator> with TickerProviderSt
       return AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 600),
-      )..repeat(reverse: true);
+      );
     });
 
     _animations = List.generate(3, (i) {
@@ -49,7 +49,8 @@ class _TypingIndicatorState extends State<TypingIndicator> with TickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return Align(
+    return RepaintBoundary(
+      child: Align(
       alignment: Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.only(left: 16, top: 4, bottom: 4),
@@ -87,6 +88,7 @@ class _TypingIndicatorState extends State<TypingIndicator> with TickerProviderSt
             );
           }),
         ),
+      ),
       ),
     );
   }

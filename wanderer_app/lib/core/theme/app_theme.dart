@@ -6,12 +6,12 @@ class AppTheme {
   static ThemeData get dark {
     return ThemeData(
       brightness: Brightness.dark,
+      useMaterial3: true,
       scaffoldBackgroundColor: WandererColors.background,
-      colorScheme: const ColorScheme.dark(
-        primary: WandererColors.primary,
-        secondary: WandererColors.secondary,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: WandererColors.primary,
+        brightness: Brightness.dark,
         surface: WandererColors.surface,
-        error: WandererColors.error,
       ),
       textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme).apply(
         bodyColor: WandererColors.textPrimary,

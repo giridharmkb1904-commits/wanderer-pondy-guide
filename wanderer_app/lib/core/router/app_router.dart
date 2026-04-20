@@ -9,13 +9,25 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/onboarding',
     routes: [
-      GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingScreen()),
-      GoRoute(path: '/otp', builder: (context, state) {
-        final phone = state.extra as String;
-        return OtpScreen(phoneNumber: phone);
-      }),
-      GoRoute(path: '/plans', builder: (context, state) => const PlanSelectionScreen()),
-      GoRoute(path: '/chat', builder: (context, state) => const ChatScreen()),
+      GoRoute(
+        path: '/onboarding',
+        builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: '/otp',
+        builder: (context, state) {
+          final phone = state.extra is String ? state.extra as String : '';
+          return OtpScreen(phoneNumber: phone);
+        },
+      ),
+      GoRoute(
+        path: '/plans',
+        builder: (context, state) => const PlanSelectionScreen(),
+      ),
+      GoRoute(
+        path: '/chat',
+        builder: (context, state) => const ChatScreen(),
+      ),
     ],
   );
 });
